@@ -21,10 +21,9 @@ public class FlutterWeb : PlatformView, MethodCallHandler {
         this.context = context
         this.registrar = registrar
 
-        println("################## $id ################## ")
-
         webView = getWebView(registrar)
         channel = MethodChannel(registrar.messenger(), "li_webview_$id")
+        channel.setMethodCallHandler(this)
     }
 
     override fun getView(): View {
@@ -36,7 +35,6 @@ public class FlutterWeb : PlatformView, MethodCallHandler {
     }
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
-        println("########Is this even been triggered?###########")
         when(call.method) {
             "loadUrl" -> {
                 val url : String = call.arguments.toString()
@@ -50,7 +48,6 @@ public class FlutterWeb : PlatformView, MethodCallHandler {
         val webView : WebView = WebView(registrar.context())
         webView.setWebViewClient(WebViewClient())
         webView.getSettings().javaScriptEnabled = true
-        webView.getSettings().
         return webView
     }
 

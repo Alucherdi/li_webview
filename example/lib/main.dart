@@ -16,7 +16,7 @@ class _MyAppState extends State<MyApp>{
 
   void onWebCreated(webController) {
     this.webController = webController;
-    this.webController.loadUrl("http://www.google.com");
+    this.webController.loadUrl("http://142.93.88.25/KMan/");
   }
 
   @override Widget build(BuildContext context) {
