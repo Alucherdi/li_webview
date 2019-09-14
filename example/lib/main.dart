@@ -11,44 +11,30 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
-  Widget _m;
+class _MyAppState extends State<MyApp>{
+  WebController webController;
 
-  @override
-  void initState() {
-    super.initState();
-    initPlatformState();
+  void onWebCreated(webController) {
+    this.webController = webController;
+    this.webController.loadUrl("http://www.google.com");
   }
 
-  Future<void> initPlatformState() async {
-    Widget m;
-
-    try {
-      m = await LiWebview.testMethod();
-    } on PlatformException {
-      print('Failed to get platform version.');
-    }
-
-    if (!mounted) return;
-
-    setState(() {
-      _m = m;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
+  @override Widget build(BuildContext context) {
+    LiWebView liWebView = new LiWebView(
+      onWebCreated: onWebCreated
+    );
 
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: Text("Hi")
         ),
-        body: Center(
-          child: _m,
-        ),
-      ),
+
+        body: Container(
+          child: liWebView,
+          height: 300
+        )
+      )
     );
   }
 }

@@ -1,21 +1,20 @@
-import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:li_webview/li_webview.dart';
+
+import '../example/lib/main.dart';
 
 void main() {
-  const MethodChannel channel = MethodChannel('li_webview');
+  testWidgets('Verify Platform version', (WidgetTester tester) async {
+    // Build our app and trigger a frame.
+    await tester.pumpWidget(MyApp());
 
-  setUp(() {
-    channel.setMockMethodCallHandler((MethodCall methodCall) async {
-      return '42';
-    });
-  });
-
-  tearDown(() {
-    channel.setMockMethodCallHandler(null);
-  });
-
-  test('getPlatformVersion', () async {
-    expect(await LiWebview.platformVersion, '42');
+    // Verify that platform version is retrieved.
+    expect(
+      find.byWidgetPredicate(
+        (Widget widget) => widget is Text &&
+                           widget.data.startsWith('Running on:'),
+      ),
+      findsOneWidget,
+    );
   });
 }

@@ -1,14 +1,24 @@
 package com.luckyintelligence.li_webview
 
-import android.webkit.WebView
-import android.webkit.WebViewClient
-import io.flutter.plugin.common.MethodCall
-import io.flutter.plugin.common.MethodChannel
-import io.flutter.plugin.common.MethodChannel.MethodCallHandler
-import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
-class LiWebviewPlugin: MethodCallHandler {
+class LiWebviewPlugin {
+  companion object {
+    @JvmStatic
+    fun registerWith(registrar: Registrar) {
+      println("LLegando a registerWith")
+      registrar
+              .platformViewRegistry()
+              .registerViewFactory(
+                      "li_webview", WebFactory(registrar)
+              )
+
+    }
+
+  }
+}
+
+  /*
   companion object {
     @JvmStatic
     fun registerWith(registrar: Registrar) {
@@ -34,5 +44,4 @@ class LiWebviewPlugin: MethodCallHandler {
       }
       else -> result.notImplemented()
     }
-  }
-}
+  }*/

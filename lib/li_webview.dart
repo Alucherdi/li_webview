@@ -1,20 +1,59 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
+import 'dart:io';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class LiWebview {
-  static const MethodChannel _channel =
-      const MethodChannel('li_webview');
 
-  static Future<String> get platformVersion async {
-    final String version = await _channel.invokeMethod('getPlatformVersion');
-    return version;
+typedef void WebViewCreatedCallback(WebController controller);
+
+class LiWebView extends StatefulWidget {
+  final WebViewCreatedCallback onWebCreated;
+
+  LiWebView({
+    Key key,
+    @required this.onWebCreated
+  });
+
+  @override
+  _LiWebView createState() => _LiWebView();
+}
+
+class _LiWebView extends State<LiWebView> {
+  @override
+  Widget build(BuildContext context) {
+    if (Platform.isAndroid) {
+      return AndroidView(
+        viewType: "li_webview",
+        onPlatformViewCreated: onPlatformViewCreated,
+        creationParamsCodec: StandardMessageCodec()
+      );
+    } // TODO: Aquí va el código del UiKitView (iOS)
+
+    return Text("Not supported device");
   }
 
-  static Future<Widget> testMethod() async {
-    String text = await _channel.invokeMethod("testMethod");
+  Future<void> onPlatformViewCreated(id) async {
+    if (widget.onWebCreated == null) {
+      return;
+    }
 
-    return Text(text);
+    widget.onWebCreated(new WebController.init(id));
+  }
+
+
+}
+
+class WebController {
+  MethodChannel _channel;
+
+  WebController.init(int id) {
+    _channel =  new MethodChannel('li_webview_$id');
+  }
+
+  Future<void> loadUrl(String url) async {
+    assert(url != null);
+    return _channel.invokeMethod('loadUrl', url);
   }
 }
