@@ -16,7 +16,7 @@ class _MyAppState extends State<MyApp>{
 
   void onWebCreated(webController) {
     this.webController = webController;
-    this.webController.loadUrl("http://142.93.88.25/KMan/");
+    this.webController.loadUrl("http://142.93.88.25/FoodDrop/");
   }
 
   @override Widget build(BuildContext context) {
@@ -25,16 +25,14 @@ class _MyAppState extends State<MyApp>{
     );
 
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text("Hi")
+      home: Container(
+        color: Colors.red,
+        child: LiWebView(
+          onWebCreated: onWebCreated,
         ),
-
-        body: Container(
-          child: liWebView,
-          height: 300
-        )
-      )
+        height: double.infinity,
+      ),
+      color: Colors.black,
     );
   }
 }
