@@ -1,5 +1,6 @@
 name: li_webview_example
 description: Demonstrates how to use the li_webview plugin.
+version: 1.0.0+1
 publish_to: 'none'
 
 environment:
