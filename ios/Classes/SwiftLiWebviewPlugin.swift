@@ -1,14 +1,10 @@
-import Flutter
-import UIKit
+//
+//  SwiftLiWebviewPlugin.swift
+//  li_webview
+//
+//  Created by Cristian Gaviria on 21/09/19.
+//
 
-public class SwiftLiWebviewPlugin: NSObject, FlutterPlugin {
-  public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: "li_webview", binaryMessenger: registrar.messenger())
-    let instance = SwiftLiWebviewPlugin()
-    registrar.addMethodCallDelegate(instance, channel: channel)
-  }
-
-  public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    result("iOS " + UIDevice.current.systemVersion)
-  }
+enum FlutterMethodName: String {
+    case loadUrl
 }

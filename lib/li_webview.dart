@@ -4,20 +4,25 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import 'package:flutter/widgets.dart';
 
 typedef void WebViewCreatedCallback(WebController controller);
 
 class LiWebView extends StatefulWidget {
   final WebViewCreatedCallback onWebCreated;
 
-  LiWebView({
+  const LiWebView({
     Key key,
-    @required this.onWebCreated
+    @required this.onWebCreated,
+    this.initialUrl,
+    this.header
   });
 
+  final String initialUrl;
+  final Map header;
+
   @override
-  _LiWebView createState() => _LiWebView();
+  State<StatefulWidget> createState() => _LiWebView();
 }
 
 class _LiWebView extends State<LiWebView> {
@@ -29,9 +34,20 @@ class _LiWebView extends State<LiWebView> {
         onPlatformViewCreated: onPlatformViewCreated,
         creationParamsCodec: StandardMessageCodec()
       );
-    } // TODO: Aquí va el código del UiKitView (iOS)
-
+    } else if (Platform.isIOS) {
+      return UiKitView(
+        viewType: 'li_webview',
+        onPlatformViewCreated: onPlatformViewCreated,
+        creationParamsCodec: StandardMessageCodec(),
+        creationParams: _InitialParams.fromWidget(widget).toMap(),
+      );
+    }
     return Text("Not supported device");
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   Future<void> onPlatformViewCreated(id) async {
@@ -41,8 +57,6 @@ class _LiWebView extends State<LiWebView> {
 
     widget.onWebCreated(new WebController.init(id));
   }
-
-
 }
 
 class WebController {
@@ -56,4 +70,29 @@ class WebController {
     assert(url != null);
     return _channel.invokeMethod('loadUrl', url);
   }
+}
+
+class _InitialParams {
+  _InitialParams({
+      this.initialUrl,
+      this.header
+  });
+
+  static _InitialParams fromWidget(LiWebView widget) {
+    return _InitialParams(
+        initialUrl: widget.initialUrl,
+        header: widget.header
+    );
+  }
+
+  final String initialUrl;
+  final Map header;
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'initialUrl': initialUrl,
+      'header': header
+    };
+  }
+
 }
