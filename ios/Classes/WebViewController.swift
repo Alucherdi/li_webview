@@ -96,6 +96,14 @@ public class WebViewController: NSObject, FlutterPlatformView, FlutterStreamHand
         }
     }
 
+    Future<String> evaluateJavascript(String javascriptString) {
+        if (javascriptString == null) {
+          return Future<String>.error(
+              ArgumentError('The argument javascriptString must not be null.'));
+        }
+        return LiWebView.evaluateJavascript(javascriptString);
+    }
+
     func load(url:String)-> Bool {
         if let urlRequest = URL(string: url) {
             LiWebView.load(URLRequest(url: urlRequest))
